@@ -14,10 +14,14 @@
 
 - (void)control:(NSControl *)control didAcceptDropWithPasteBoard:(NSPasteboard *)pasteboard;
 
+- (void)mouseDidEnterControl:(NSControl *)control;
+- (void)mouseDidExitControl:(NSControl *)control;
+
 @end
 
-@interface NSControl (DragInteraction)
+@interface NSControl (Interaction)
 
 @property (weak, nonatomic) id <NSControlInteractionDelegate> interactionDelegate;
+@property (weak, nonatomic) id <NSControlInteractionDelegate> mouseInteractionDelegate;
 
 @end

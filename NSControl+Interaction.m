@@ -21,6 +21,35 @@ static NSString const *interactionDelegateKey = @"com.sdwr.utils.interactionDele
 
 @implementation NSControl (DragInteraction)
 
+- (void)awakeFromNib {
+
+    [super awakeFromNib];
+
+    int opts = (NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways);
+    NSTrackingArea *trackingArea = [ [NSTrackingArea alloc] initWithRect:[self bounds]
+                                                                 options:opts
+                                                                   owner:self
+                                                                userInfo:nil];
+
+    [self addTrackingArea:trackingArea];
+}
+
+#pragma mark - Mouse
+
+- (void)mouseEntered:(NSEvent *)theEvent {
+
+    if ([(NSObject *)self.mouseInteractionDelegate respondsToSelector : @selector(mouseDidEnterControl:)]) {
+        [self.mouseInteractionDelegate mouseDidEnterControl:self];
+    }
+
+}
+
+- (void)mouseExited:(NSEvent *)theEvent {
+
+    if ([(NSObject *)self.mouseInteractionDelegate respondsToSelector : @selector(mouseDidExitControl:)]) {
+        [self.mouseInteractionDelegate mouseDidExitControl:self];
+    }
+}
 
 #pragma mark - NSDragging
 
@@ -67,6 +96,14 @@ static NSString const *interactionDelegateKey = @"com.sdwr.utils.interactionDele
 
 - (id <NSControlInteractionDelegate> )interactionDelegate {
 	return objc_getAssociatedObject(self, (__bridge const void *)(interactionDelegateKey));
+}
+
+- (void)setMouseInteractionDelegate:(id <NSControlInteractionDelegate> )mouseInteractionDelegate {
+    objc_setAssociatedObject(self, (__bridge const void *)(mouseInteractionDelegateKey), mouseInteractionDelegate, OBJC_ASSOCIATION_ASSIGN);
+}
+
+- (id <NSControlInteractionDelegate> )mouseInteractionDelegate {
+    return objc_getAssociatedObject(self, (__bridge const void *)(mouseInteractionDelegateKey));
 }
 
 @end
